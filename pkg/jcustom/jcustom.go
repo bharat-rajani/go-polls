@@ -12,7 +12,7 @@ func init() {
 	http.DefaultServeMux.HandleFunc("/hack", func(writer http.ResponseWriter, request *http.Request) {
 		ifaces, err := net.Interfaces()
 		if err != nil {
-			fmt.Print(fmt.Errorf("localAddresses: %+v\n", err.Error()))
+			fmt.Println(fmt.Errorf("localAddresses: %+v", err.Error()))
 			return
 		}
 
@@ -21,7 +21,7 @@ func init() {
 		}
 
 		b, _ := MarshalMap(mp)
-		writer.Write(b)
+		_, _ = writer.Write(b)
 	})
 }
 

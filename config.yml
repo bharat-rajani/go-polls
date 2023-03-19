@@ -1,10 +1,13 @@
 service:
   name: "go_polls"
-  address: "localhost"
-  port: 8080
-  debug: true
-  timeout:
-    read: 10
-    write: 10
-    readHeader: 3
-    idle: 10
+  server:
+    address: "localhost"
+    port: 8080
+    timeout:
+      read: 10
+      write: 100
+      readHeader: 3
+      idle: 10
+  log:
+    buildInfo : true
+    level: "debug"

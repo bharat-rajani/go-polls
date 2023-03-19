@@ -1,9 +1,13 @@
 package main
 
 import (
-	"github.com/bharat-rajani/go-polls/internal/api"
+	"context"
+	"github.com/bharat-rajani/go-polls/internal/configurer"
 )
 
 func main() {
-	api.StartService()
+	err := configurer.StartAPIService(context.Background())
+	if err != nil {
+		panic(err)
+	}
 }
