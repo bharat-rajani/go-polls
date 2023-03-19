@@ -8,6 +8,7 @@ import (
 	"testing"
 )
 
+// Testing using a response recorder
 func TestGetPollsHandler_200OK_ResponseRecorder(t *testing.T) {
 	t.Parallel()
 	expectedPollsResponse := `{"1":{"choice":["hi","bonjour"],"name":"Hello"}}`
