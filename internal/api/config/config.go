@@ -5,4 +5,10 @@ type ServiceConfig struct {
 	Address string
 	Port    int
 	Debug   bool
+	Timeout struct {
+		Read       int
+		Write      int
+		ReadHeader int
+		Idle       int
+	}
 }

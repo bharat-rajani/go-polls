@@ -2,62 +2,51 @@ package api
 
 import (
 	"fmt"
-	"github.com/bharat-rajani/go-polls/internal/api/config"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
+	"github.com/bharat-rajani/go-polls/pkg/jcustom"
 	"net/http"
-	"os"
-	"runtime/debug"
+	_ "net/http/pprof"
 )
 
-var ServiceConfig *config.ServiceConfig
+func RegisterRootRoutes(mux *http.ServeMux) *http.ServeMux {
+	mux.HandleFunc("/", RootHandler)
+	return mux
+}
 
-func StartService() {
-	ServiceConfig = loadConfig()
-	configureGlobalLogger()
-	http.HandleFunc("/hello", func(writer http.ResponseWriter, request *http.Request) {
-		_, err := writer.Write([]byte(`HelloResponse`))
-		if err != nil {
+func RootHandler(writer http.ResponseWriter, request *http.Request) {
+	switch request.Method {
+
+	case "GET":
+		switch request.URL.Path {
+		case "/polls":
+			GetPollsHandler(writer, request)
 			return
+		case "/hello":
+			_, err := writer.Write([]byte(`HelloResponse`))
+			if err != nil {
+				return
+			}
+		default:
+			writer.WriteHeader(http.StatusNotFound)
+			fmt.Fprint(writer, "404 not found")
 		}
+	default:
+		writer.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func GetPollsHandler(w http.ResponseWriter, r *http.Request) {
+	b, err := jcustom.MarshalMap(map[string]interface{}{
+		"1": map[string]interface{}{
+			"name":   "Hello",
+			"choice": []string{"hi", "bonjour"},
+		},
 	})
-	log.Info().Msgf("Starting server on %s:%d", ServiceConfig.Address, ServiceConfig.Port)
-	err := http.ListenAndServe(fmt.Sprintf("%s:%d", ServiceConfig.Address, ServiceConfig.Port), nil)
 	if err != nil {
-		panic(err)
+		w.Write([]byte("Internal Server Error"))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
-}
-
-func configureGlobalLogger() {
-	buildInfo, _ := debug.ReadBuildInfo()
-
-	logObj := zerolog.New(os.Stdout).
-		Level(zerolog.TraceLevel).
-		With().
-		Timestamp().
-		Caller().
-		Int("pid", os.Getpid()).
-		Str("go_version", buildInfo.GoVersion).
-		Logger()
-
-	if ServiceConfig.Debug {
-		logObj = logObj.Output(zerolog.ConsoleWriter{Out: os.Stdout})
-	}
-	log.Logger = logObj
-}
-
-func loadConfig() *config.ServiceConfig {
-	viper.SetConfigFile("./config.yml")
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("fatal error config file: %w", err))
-	}
-	var serviceConfig config.ServiceConfig
-	err = viper.UnmarshalKey("service", &serviceConfig)
-	if err != nil {
-		panic(err)
-	}
-	return &serviceConfig
+	w.Write(b)
+	return
 }
