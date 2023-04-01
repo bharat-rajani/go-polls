@@ -17,3 +17,7 @@
 
 .idea/
 polls
+
+./bin
+cover.out
+coverage.out
