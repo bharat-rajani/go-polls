@@ -1,7 +1,7 @@
 package configurer
 
 import (
-	"github.com/bharat-rajani/go-polls/internal/api"
+	"github.com/bharat-rajani/go-polls/internal/api/greet"
 	"github.com/bharat-rajani/go-polls/internal/api/polls"
 	"github.com/bharat-rajani/go-polls/internal/api/votes"
 	"github.com/bharat-rajani/go-polls/internal/service"
@@ -12,7 +12,7 @@ import (
 func RegisterRoutes(svc *service.Service) {
 	RegisterVoteRoutes(svc)
 	RegisterPollsRoutes(svc)
-	svc.RegisterRoute("/service/hello", api.HandleGreeter)
+	RegisterGreetRoutes(svc)
 	svc.RegisterRoute("/debug/pprof/", func(service *service.Service) http.HandlerFunc {
 		return pprof.Index
 	})
@@ -35,4 +35,8 @@ func RegisterPollsRoutes(s *service.Service) {
 }
 func RegisterVoteRoutes(s *service.Service) {
 	s.RegisterRoute("/api/polls", polls.HandleListPolls)
+}
+
+func RegisterGreetRoutes(s *service.Service) {
+	s.RegisterRoute("/service/hello", greet.HandleGreeter)
 }

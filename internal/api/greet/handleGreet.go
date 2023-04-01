@@ -1,4 +1,4 @@
-package api
+package greet
 
 import (
 	"github.com/bharat-rajani/go-polls/internal/service"

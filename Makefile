@@ -19,7 +19,7 @@ deps: ### Optimize dependencies
 	@go mod vendor
 
 .PHONY: build
-build: deps clean ### Build binary
+build: clean ### Build binary
 	@go build -a -v -ldflags "${LD_FLAGS}" -o ./bin/polls ./cmd/polls/*.go
 	@chmod +x ./bin/*
 
