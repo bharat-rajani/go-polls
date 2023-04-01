@@ -41,6 +41,8 @@ type ServiceConfig struct {
 		BuildInfo bool
 		Level     string
 	}
+	JWK struct {
+	}
 }
 
 func (s *Service) GetConfig() *ServiceConfig {
