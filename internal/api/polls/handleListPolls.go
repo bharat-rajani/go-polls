@@ -1,9 +1,10 @@
 package polls
 
 import (
+	"net/http"
+
 	"github.com/bharat-rajani/go-polls/internal/service"
 	"github.com/bharat-rajani/go-polls/pkg/jcustom"
-	"net/http"
 )
 
 func HandleListPolls(s *service.Service) http.HandlerFunc {

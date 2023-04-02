@@ -2,8 +2,10 @@ package configurer
 
 import (
 	"context"
-	"github.com/bharat-rajani/go-polls/internal/service"
+
 	"github.com/spf13/viper"
+
+	"github.com/bharat-rajani/go-polls/internal/service"
 )
 
 func StartAPIService(ctx context.Context) error {
@@ -17,13 +19,13 @@ func StartAPIService(ctx context.Context) error {
 	return nil
 }
 
-func loadConfig() (*service.ServiceConfig, error) {
+func loadConfig() (*service.Config, error) {
 	viper.SetConfigFile("./config.yml")
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
 		return nil, err
 	}
-	var serviceConfig *service.ServiceConfig
+	var serviceConfig *service.Config
 	err = viper.UnmarshalKey("service", &serviceConfig)
 	if err != nil {
 		return nil, err

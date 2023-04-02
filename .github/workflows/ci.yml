@@ -7,7 +7,7 @@ on:
     branches: [ $default-branch ]
 
 jobs:
-  golangci:
+  lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
@@ -56,6 +56,11 @@ jobs:
 
       - name: Run golint
         run: golint ./...
+
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: ./...
 
   build:
     name: Build

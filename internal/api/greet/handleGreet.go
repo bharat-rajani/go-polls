@@ -1,8 +1,9 @@
 package greet
 
 import (
-	"github.com/bharat-rajani/go-polls/internal/service"
 	"net/http"
+
+	"github.com/bharat-rajani/go-polls/internal/service"
 )
 
 func HandleGreeter(s *service.Service) http.HandlerFunc {

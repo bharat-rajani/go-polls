@@ -11,7 +11,7 @@ run: clean build
 
 clean: ### Clean build files
 	@rm -rf ./bin
-	@go clean
+	@go clean -cache -testcache -modcache
 
 
 deps: ### Optimize dependencies
@@ -20,7 +20,7 @@ deps: ### Optimize dependencies
 
 .PHONY: build
 build: clean ### Build binary
-	@go build -a -v -ldflags "${LD_FLAGS}" -o ./bin/polls ./cmd/polls/*.go
+	@go build -v -race -ldflags "${LD_FLAGS}" -o ./bin/polls ./cmd/polls/*.go
 	@chmod +x ./bin/*
 
 .PHONY: test
@@ -37,6 +37,10 @@ vendor: ### Vendor dependencies
 
 .PHONY: lint
 lint:
-	staticcheck ./...
+	@staticcheck ./...
 	@go vet ./...
-	@golangci-lint run ./...
+	@golangci-lint run --enable=errcheck,gocritic,gofmt,goimports,gosec,gosimple,govet,ineffassign,revive,staticcheck,typecheck,unused,bodyclose ./...
+
+.PHONY: fiximports
+fiximports:
+	@goimports -local "github.com/bharat-rajani/go-polls" -w $(shell find . -type f -name '*.go' -not -path "./vendor/*")

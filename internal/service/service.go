@@ -3,8 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"net"
 	"net/http"
 	"os"
@@ -12,12 +10,15 @@ import (
 	"runtime/debug"
 	"syscall"
 	"time"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 type Service struct {
 	server *Server
 	Log    *zerolog.Logger
-	config *ServiceConfig
+	config *Config
 }
 
 type Server struct {
@@ -25,7 +26,7 @@ type Server struct {
 	mux *http.ServeMux
 }
 
-type ServiceConfig struct {
+type Config struct {
 	Name   string
 	Server struct {
 		Address string
@@ -45,7 +46,7 @@ type ServiceConfig struct {
 	}
 }
 
-func (s *Service) GetConfig() *ServiceConfig {
+func (s *Service) GetConfig() *Config {
 	return s.config
 }
 
@@ -88,15 +89,16 @@ func (s *Service) shutdownServer() {
 	}
 }
 
-func NewServiceFromConfig(ctx context.Context, config *ServiceConfig) *Service {
+func NewServiceFromConfig(ctx context.Context, config *Config) *Service {
+	_ = ctx
 	return &Service{
-		server: NewHttpServerFromConfig(config),
+		server: NewHTTPServerFromConfig(config),
 		Log:    NewLogger(config),
 		config: config,
 	}
 }
 
-func NewHttpServerFromConfig(config *ServiceConfig) *Server {
+func NewHTTPServerFromConfig(config *Config) *Server {
 
 	addr := fmt.Sprintf("%s:%d", config.Server.Address, config.Server.Port)
 	mux := http.NewServeMux()
@@ -116,7 +118,7 @@ func NewHttpServerFromConfig(config *ServiceConfig) *Server {
 	}
 }
 
-func NewLogger(config *ServiceConfig) *zerolog.Logger {
+func NewLogger(config *Config) *zerolog.Logger {
 	logLevel, err := zerolog.ParseLevel(config.Log.Level)
 	if err != nil {
 		panic(err)

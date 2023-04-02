@@ -1,12 +1,13 @@
 package configurer
 
 import (
+	"net/http"
+	"net/http/pprof"
+
 	"github.com/bharat-rajani/go-polls/internal/api/greet"
 	"github.com/bharat-rajani/go-polls/internal/api/polls"
 	"github.com/bharat-rajani/go-polls/internal/api/votes"
 	"github.com/bharat-rajani/go-polls/internal/service"
-	"net/http"
-	"net/http/pprof"
 )
 
 func RegisterRoutes(svc *service.Service) {
