@@ -17,6 +17,6 @@
 
 .idea/
 
-./bin
+./bin/*
 cover.out
 coverage.out
