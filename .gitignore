@@ -17,6 +17,14 @@
 
 .idea/
 
-./bin/*
+bin/
 cover.out
 coverage.out
+
+
+
+# Chart dependencies
+charts/**/charts/*.tgz
+
+# Environment
+.env
