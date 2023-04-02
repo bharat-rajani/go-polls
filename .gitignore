@@ -16,7 +16,6 @@
 *.out
 
 .idea/
-polls
 
 ./bin
 cover.out
